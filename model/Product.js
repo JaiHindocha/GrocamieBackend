@@ -14,13 +14,13 @@ const ProductSchema = mongoose.Schema({
         required: true
     },
     discount: {
-        type: Int32Array
+        type: Number
     },
     largeImageUrl: {
         type: String
     },
     mrp: {
-        type: Int32Array,
+        type: Number,
         required: true
     },
     name: {
@@ -31,7 +31,7 @@ const ProductSchema = mongoose.Schema({
         type: String
     },
     sp: {
-        type: Int32Array,
+        type: Number,
         required: true
     },
     type: {
@@ -39,7 +39,7 @@ const ProductSchema = mongoose.Schema({
         required: true
     },
     weight: {
-        type: Int32Array
+        type: Number
     },
     weightUnitType: {
         type: String
@@ -51,4 +51,4 @@ const ProductSchema = mongoose.Schema({
 });
 
 // export model user with UserSchema
-module.exports = mongoose.model("product", UserSchema);
+module.exports = mongoose.model("product", ProductSchema);
