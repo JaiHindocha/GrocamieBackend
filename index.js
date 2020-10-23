@@ -1,9 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const user = require("./routes/user"); //new addition
+const product = require("./routes/product"); //new addition
+
 const InitiateMongoServer = require("./config/db");
 
-// Initiate Mongo Server
 InitiateMongoServer();
 
 const app = express();
@@ -19,12 +20,9 @@ app.get("/", (req, res) => {
 });
 
 
-/**
- * Router Middleware
- * Router - /user/*
- * Method - *
- */
 app.use("/user", user);
+app.use("/product", product);
+
 
 app.listen(PORT, (req, res) => {
   console.log(`Server Started at PORT ${PORT}`);
