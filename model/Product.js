@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const UserSchema = mongoose.Schema({
+const ProductSchema = mongoose.Schema({
     brand: {
         type: String,
         required: true
@@ -14,13 +14,13 @@ const UserSchema = mongoose.Schema({
         required: true
     },
     discount: {
-        type: Integer
+        type: Int32Array
     },
     largeImageUrl: {
         type: String
     },
     mrp: {
-        type: Integer,
+        type: Int32Array,
         required: true
     },
     name: {
@@ -31,7 +31,7 @@ const UserSchema = mongoose.Schema({
         type: String
     },
     sp: {
-        type: Integer,
+        type: Int32Array,
         required: true
     },
     type: {
@@ -39,7 +39,7 @@ const UserSchema = mongoose.Schema({
         required: true
     },
     weight: {
-        type: Integer
+        type: Int32Array
     },
     weightUnitType: {
         type: String
@@ -51,4 +51,4 @@ const UserSchema = mongoose.Schema({
 });
 
 // export model user with UserSchema
-module.exports = mongoose.model("user", UserSchema);
+module.exports = mongoose.model("product", UserSchema);
