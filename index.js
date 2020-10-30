@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const user = require("./routes/user"); //new addition
 const product = require("./routes/product"); //new addition
+const community = require("./routes/community"); //new addition
+
 
 const InitiateMongoServer = require("./config/db");
 
@@ -22,6 +24,8 @@ app.get("/", (req, res) => {
 
 app.use("/user", user);
 app.use("/product", product);
+app.use("/community", community);
+
 
 
 app.listen(PORT, (req, res) => {
