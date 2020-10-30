@@ -12,6 +12,7 @@ router.get("/productAll",async (req, res) => {
              message: err.message || "Some error occurred while retrieving the product."
          });
      });
+
 });
 
 module.exports = router;
