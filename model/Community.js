@@ -13,6 +13,9 @@ const CommunitySchema = mongoose.Schema({
     },
     requests: {
         type: [String]
+    },
+    closingTime: {
+        type: Date
     }
 });
 
