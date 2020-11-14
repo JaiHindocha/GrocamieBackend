@@ -21,18 +21,20 @@ router.post(
     //   leaderUid:,
     //   betaUsers:,
     //   name:,
-    //   requests:
+    //   requests:,
+    //   closingTime:
     // }
 
 
-    const {leaderUid,betaUsers,name,requests} = req.body;
+    const {leaderUid,betaUsers,name,requests,closingTime} = req.body;
     try {
 
       community = new Community({
         leaderUid,
         betaUsers,
         name,
-        requests
+        requests,
+        closingTime
       });
 
       await community.save();
@@ -64,6 +66,40 @@ router.put(
       .catch(err => next(err));
     }
 );
+
+router.put(
+  "/setClosingTime",
+  function (req, res) {
+    if(req.user.alpha==1){
+      var conditions = {_id: req.body.communityid};
+      var set = {$set:{closingTime:req.body.closingTime}};
+      // {
+      //   "communityid":"",
+      //   "closingTime":""
+      // }
+      Community.update(conditions, set).then(doc => {
+          if (!doc) {return res.status(404).end();}
+          return res.status(200).json(doc);
+      })
+      .catch(err => next(err));
+    }
+  }
+);
+
+router.get("/closingTime", auth, async (req, res) => {
+  try {
+      const user = await Community.find({communityid:req.body.communityid});
+      if(user && user.length){
+          res.json(closingTime);
+      }
+      else{
+          res.json("0 (no closing time)");
+      }   
+  } 
+  catch (e) {
+       res.send({ message: "Error in Fetching user" });
+  }
+});
 
 router.put(
   "/sendRequest",
