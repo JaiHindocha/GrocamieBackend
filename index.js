@@ -30,6 +30,6 @@ app.use('/community', community);
 app.use('/cart', cart);
 app.use('/order', order);
 
-app.listen(PORT, (req, res) => {
+app.listen(PORT, () => {
   console.log(`Server Started at PORT ${PORT}`);
 });
