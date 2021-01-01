@@ -7,8 +7,9 @@ const url = require('url');
 
 const Product = require('../model/Product');
 
-router.get('/all', async (req, res) => {
+router.get('/', async (req, res) => {
   Product.find({})
+    .limit(10)
     .then((oProduct) => {
       res.send(oProduct);
     })
