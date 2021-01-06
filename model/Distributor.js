@@ -1,23 +1,21 @@
 const mongoose = require("mongoose");
 
-const UserSchema = mongoose.Schema({
-    address: {
-        type: String,
-        required: true
-    },
-    alpha: {
-        type: Boolean,
-        required: true
-    },
+const DistributorSchema = mongoose.Schema({
     email: {
         type: String,
         required: true
     },
-    leaderEmail: {
-        type: String
+    contact: {
+        type: String,
+        required: true
     },
-    leaderUid: {
-        type: String
+    deliveryDay: [{
+      location: String,
+      day: String
+    }],
+    username: {
+        type: String,
+        required: true
     },
     name: {
         type: String,
@@ -34,6 +32,13 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    manufacturer: {
+        type: [String]
+    },
+    location: {
+      type: String,
+      required: true
+    },
     createdAt: {
         type: Date,
         default: Date.now()
@@ -41,4 +46,4 @@ const UserSchema = mongoose.Schema({
 });
 
 // export model user with UserSchema
-module.exports = mongoose.model("user", UserSchema);
+module.exports = mongoose.model("distributor", DistributorSchema);

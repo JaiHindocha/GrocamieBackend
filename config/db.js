@@ -3,11 +3,12 @@
 
     // Replace this with your MONGOURI.
     const MONGOURI = "mongodb+srv://jai:grocamie123@cluster0.f9wcc.mongodb.net/Grocamie?retryWrites=true&w=majority";
-    
+
     const InitiateMongoServer = async () => {
       try {
         await mongoose.connect(MONGOURI, {
-          useNewUrlParser: true
+          useNewUrlParser: true,
+          useUnifiedTopology: true
         });
         console.log("Connected to DB !!");
       } catch (e) {
@@ -15,5 +16,5 @@
         throw e;
       }
     };
-    
-    module.exports = InitiateMongoServer;   
+
+    module.exports = InitiateMongoServer;

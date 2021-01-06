@@ -6,12 +6,8 @@ const router = express.Router();
 const auth = require("../middleware/auth");
 
 const User = require("../model/User");
-
-/**
- * @method - POST
- * @param - /signup
- * @description - User SignUp
- */
+const Cart = require("../model/Cart");
+const MasterCart = require("../model/MasterCart")
 
 router.post(
   "/signup",
@@ -29,7 +25,7 @@ router.post(
       });
     }
 
-    const {address,alpha,email,leaderEmail,leaderUid,name,profileUrl,verified,password } = req.body;
+    const {address,alpha,email,leaderEmail,leaderUid,name,profileUrl,verified,password} = req.body;
     try {
       let user = await User.findOne({
         email
@@ -59,9 +55,25 @@ router.post(
 
       const payload = {
         user: {
-          id: user.id
+          id: user.id,
+          alpha: user.alpha,
+          leaderUid: user.leaderUid,
+          name: user.name
         }
       };
+
+      cart = new Cart({
+        _id: user.id
+      });
+
+      await cart.save();
+
+      if (user.alpha == true) {
+        masterCart = new MasterCart ({
+          _id: user.id
+        });
+        await masterCart.save();
+      }
 
       jwt.sign(
         payload,
@@ -118,7 +130,10 @@ router.post(
 
       const payload = {
         user: {
-          id: user.id
+          id: user.id,
+          alpha: user.alpha,
+          leaderUid: user.leaderUid,
+          name: user.name
         }
       };
 
@@ -126,7 +141,7 @@ router.post(
         payload,
         "randomString",
         {
-          expiresIn: 3600
+          expiresIn: 36000
         },
         (err, token) => {
           if (err) throw err;
@@ -144,20 +159,35 @@ router.post(
   }
 );
 
-/**
- * @method - POST
- * @description - Get LoggedIn User
- * @param - /user/me
- */
+router.put(
+    "/makeAlpha/:id",
+    function (req, res) {
+      var conditions = {_id: req.params.id};
+      User.update(conditions, req.body).then(doc => {
+          if (!doc) {return res.status(404).end();}
+          return res.status(200).json(doc);
+      })
+      .catch(err => next(err));
+    }
+  );
 
 router.get("/me", auth, async (req, res) => {
   try {
-    // request.user is getting fetched from Middleware after token authentication
     const user = await User.findById(req.user.id);
     res.json(user);
   } catch (e) {
     res.send({ message: "Error in Fetching user" });
   }
 });
+
+router.get("/isAlpha", auth, async (req, res) => {
+    try {
+      const user = await User.find({_id:req.user.id},{alpha:1});
+      res.json(user);
+    }
+    catch (e) {
+      res.send({ message: "Error in Fetching user" });
+    }
+  });
 
 module.exports = router;
