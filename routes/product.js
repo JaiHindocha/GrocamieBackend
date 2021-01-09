@@ -63,7 +63,7 @@ router.get("/all",async (req, res) => {
 // }
 // });
 
-router.get("/get", async (req, res) => {
+router.post("/get", async (req, res) => {
   // const errors = validationResult(req);
   // if (!errors.isEmpty()) {
   //   return res.status(400).json({
