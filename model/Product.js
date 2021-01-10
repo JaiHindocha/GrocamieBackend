@@ -59,9 +59,6 @@ const ProductSchema = mongoose.Schema({
         required: true
     },
     weight: {
-        type: Number
-    },
-    weightUnitType: {
         type: String
     },
     createdAt: {
