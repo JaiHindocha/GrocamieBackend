@@ -83,11 +83,11 @@ router.post("/get", async (req, res) => {
   }
 
   else if (!(category == "" || category == null)){
-    dbReq = Product.find({category: category, availability: "Y"});
+    dbReq = Product.find({category: category, availability: "Y"}).sort({PriorityIndex:-1});
   }
 
   else if ((category == "" || category == null) && (search == null || search == "")){
-    dbReq = Product.find({availability: "Y"});
+    dbReq = Product.find({availability: "Y"}).sort({PriorityIndex:-1});
   }
 
   else {
