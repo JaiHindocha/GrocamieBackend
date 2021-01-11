@@ -6,6 +6,8 @@ const product = require("./routes/product"); //new addition
 const community = require("./routes/community"); //new addition
 const cart = require("./routes/cart");
 const order = require("./routes/order");
+const cors = require('cors')
+
 
 const InitiateMongoServer = require("./config/db");
 
@@ -18,6 +20,7 @@ const PORT = process.env.PORT || 8000;
 
 // Middleware
 app.use(bodyParser.json());
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.json({ message: "API Working" });
