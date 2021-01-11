@@ -14,8 +14,6 @@ const Order = require("../model/Order");
 const User = require("../model/User");
 const Product = require("../model/Product");
 
-
-
 router.post("/signup",
   [
     check("password", "Please enter a valid password").isLength({

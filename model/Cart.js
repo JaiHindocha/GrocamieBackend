@@ -19,8 +19,3 @@ const CartSchema = mongoose.Schema({
 
 // export model user with UserSchema
 module.exports = mongoose.model("cart", CartSchema);
-
-// Cart.prototype.isInCart = function(productId){
-//   return mongoose.model("Cart").find()
-//
-// }

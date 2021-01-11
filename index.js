@@ -16,15 +16,15 @@ InitiateMongoServer();
 const app = express();
 
 // PORT
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 4000;
 
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get("/", (req, res) => {
-  res.json({ message: "API Working" });
-});
+// app.get("/", (req, res) => {
+//   res.json({ message: "API Working" });
+// });
 
 
 app.use("/user", user);
