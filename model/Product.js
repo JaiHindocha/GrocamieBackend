@@ -13,7 +13,7 @@ const ProductSchema = mongoose.Schema({
         type: Number,
         required: true
     },
-    PriorityIndex: {
+    priorityIndex: {
       type: Number,
       required: true
     },
