@@ -503,6 +503,34 @@ router.get("/getPastMasterPrices", auth, async (req, res) => {
   }
 });
 
+router.get("/products", auth, async (req, res) => {
+  try {
+    const maunfacturers = await Distributor.find({"_id": req.user._id});
+    const manufacturersName = await Manufacturer.find({"_id": {$in: maunfacturers[0]['manufacturer']}});
+    const products = await Product.find({"manufacturer": {$in: manufacturersName[0]['name']}},{"keywords":0});
+    res.json(products);
+
+  } catch (e) {
+    // res.send({ message: "Error in Fetching distributor" });
+    console.log(e);
+  }
+});
+
+router.put(
+  "/updateProduct",
+  function (req, res) {
+
+    var conditions = {_id:productId};
+    var set = {$set:{"req.body.field":"req.body.newVal"}};
+
+    Product.update(conditions, set).then(doc => {
+        if (!doc) {return res.status(404).end();}
+        return res.status(200).json(doc);
+    })
+    .catch(err => next(err));
+  }
+);
+
 router.post("/addManufacturer",
   [],
   async (req, res) => {
@@ -528,6 +556,21 @@ router.post("/addManufacturer",
       console.log(err.message);
       res.status(500).send("Error in Saving");
     }
+  }
+);
+
+router.put(
+  "/assignManufacturer",
+  function (req, res) {
+ 
+    var conditions = {_id: req.user._id};
+    var push = {$push: {manufacturer: req.body.manufacturerId}};
+
+    Distributor.update(conditions, push).then(doc => {
+        if (!doc) {return res.status(404).end();}
+        return res.status(200).json(doc);
+    })
+    .catch(err => next(err));
   }
 );
 

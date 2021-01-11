@@ -23,7 +23,7 @@ const ProductSchema = mongoose.Schema({
     mrp: {
         type: Number
     },
-    DealerPrice: {
+    dealerPrice: {
         type: Number
     },
     discount: {
