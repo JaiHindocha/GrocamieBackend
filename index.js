@@ -6,7 +6,7 @@ const product = require("./routes/product"); //new addition
 const community = require("./routes/community"); //new addition
 const cart = require("./routes/cart");
 const order = require("./routes/order");
-const cors = require('cors')
+const cors = require('cors');
 
 
 const InitiateMongoServer = require("./config/db");
