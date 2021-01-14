@@ -21,7 +21,7 @@ const ProductSchema = mongoose.Schema({
       type: Number,
       required: true
     },
-    availablity:{
+    availability:{
       type: String,
       required: true
     },
