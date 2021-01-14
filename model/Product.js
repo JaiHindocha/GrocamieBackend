@@ -1,33 +1,33 @@
 const mongoose = require("mongoose");
 
 const ProductSchema = mongoose.Schema({
+    _id: {
+      type: mongoose.ObjectId,
+      required: true
+    },
     brand: {
-        type: String,
-        required: true
+        type: String
     },
     manufacturer: {
-        type: String,
-        required: true
+        type: String
     },
     gst: {
-        type: Number,
-        required: true
+        type: Number
     },
     PriorityIndex: {
-      type: Number,
-      required: true
+      type: Number
     },
     margin: {
-      type: Number,
-      required: true
+      type: String
+    },
+    marginP: {
+      type: String
     },
     availability:{
-      type: String,
-      required: true
+      type: String
     },
     category: {
-        type: String,
-        required: true
+        type: String
     },
     description: {
         type: String
@@ -39,8 +39,7 @@ const ProductSchema = mongoose.Schema({
         type: String
     },
     mrp: {
-        type: Number,
-        required: true
+        type: Number
     },
     name: {
         type: String,
@@ -50,8 +49,8 @@ const ProductSchema = mongoose.Schema({
         type: String
     },
     sp: {
-        type: Number,
-        required: true
+        type: Number
+        // required: true
     },
     weight: {
         type: String
