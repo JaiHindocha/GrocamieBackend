@@ -25,7 +25,7 @@ router.post(
       });
     }
 
-    const {address,alpha,email,leaderEmail,leaderUid,name,profileUrl,verified,password} = req.body;
+    const {address,alpha,email,communityCode,name,profileUrl,verified,password} = req.body;
     try {
       let user = await User.findOne({
         email
@@ -40,8 +40,7 @@ router.post(
         address,
         alpha,
         email,
-        leaderEmail,
-        leaderUid,
+        communityCode,
         name,
         profileUrl,
         verified,
@@ -57,7 +56,7 @@ router.post(
         user: {
           id: user.id,
           alpha: user.alpha,
-          leaderUid: user.leaderUid,
+          communityCode: user.communityCode,
           name: user.name
         }
       };
@@ -70,7 +69,7 @@ router.post(
 
       if (user.alpha == true) {
         masterCart = new MasterCart ({
-          _id: user.id
+          _id: user.communityCode
         });
         await masterCart.save();
       }
@@ -132,7 +131,7 @@ router.post(
         user: {
           id: user.id,
           alpha: user.alpha,
-          leaderUid: user.leaderUid,
+          communityCode: user.communityCode,
           name: user.name
         }
       };

@@ -77,7 +77,7 @@ router.post("/createMaster", auth, async (req, res) => {
                     + currentdate.getSeconds();
 
       masterOrder = new MasterOrder({
-        _alphaId: req.user.id,
+        communityCode: req.user.communityCode,
         timestamp: datetime,
         products: productCart,
         total: total

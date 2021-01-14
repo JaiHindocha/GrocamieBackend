@@ -13,10 +13,7 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    leaderEmail: {
-        type: String
-    },
-    leaderUid: {
+    communityCode: {
         type: String
     },
     name: {

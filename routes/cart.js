@@ -96,22 +96,17 @@ router.post("/add", auth, async (req, res) => {
   }
 
 
-    if (req.user.alpha == true){
-      var alphaId = req.user.id;
-    }
-    else{
-      var alphaId = req.user.leaderUid;
-    }
+    var communityCode = req.user.communityCode;
 
     const manufacturerName = await Product.find({_id : productId},{manufacturer:1,sp:1});
     const manufacturerId = await Manufacturer.find({name:manufacturerName[0]['manufacturer']});
     console.log(manufacturerName[0]['sp']);
-    MasterCart.find({_id: alphaId, products: {$elemMatch: {_productId: productId}}}, (err, data) => {
+    MasterCart.find({_id: communityCode, products: {$elemMatch: {_productId: productId}}}, (err, data) => {
       // Cart.update(conditions, {$inc: {"products.$.quantity":quantityToAdd}});
 
 
       if(!Array.isArray(data) || !data.length){
-        MasterCart.updateOne({_id: alphaId}, {$push: {products:{_productId: productId, _manufacturerId:manufacturerId[0]['_id'], _sp: manufacturerName[0]['sp'], quantity: quantity}}})
+        MasterCart.updateOne({_id: communityCode}, {$push: {products:{_productId: productId, _manufacturerId:manufacturerId[0]['_id'], _sp: manufacturerName[0]['sp'], quantity: quantity}}})
             .then(oCart => {
                     res.send(oCart);
                  }).catch(err => {
@@ -122,11 +117,11 @@ router.post("/add", auth, async (req, res) => {
       }
       else{
 
-        MasterCart.findOneAndUpdate({_id: alphaId, products: {$elemMatch: {_productId: productId}}}, {$inc: {"products.$.quantity":quantity}}, {new: true}, (err, data) => {
+        MasterCart.findOneAndUpdate({_id: communityCode, products: {$elemMatch: {_productId: productId}}}, {$inc: {"products.$.quantity":quantity}}, {new: true}, (err, data) => {
 
           if((data["products"].find(product => product._productId === productId).quantity) <= 0) {
 
-            MasterCart.update({_id: alphaId}, {$pull: {"products": {"_productId": productId}}})
+            MasterCart.update({_id: communityCode}, {$pull: {"products": {"_productId": productId}}})
                   .then(oCart => {
                           res.send(oCart);
                        }).catch(err => {
@@ -155,7 +150,7 @@ router.post("/add", auth, async (req, res) => {
 
 
 
-        MasterCart.updateOne({_id: alphaId}, {$inc: {"total":(quantity*price)}})
+        MasterCart.updateOne({_id: communityCode}, {$inc: {"total":(quantity*price)}})
             .then(oCart => {
                     res.send(oCart);
                  }).catch(err => {
@@ -185,14 +180,7 @@ router.post("/delete", auth, async (req, res) => {
 
   const {productId}= req.body;
 
-  if (req.user.alpha == true){
-    var alphaId = req.user.id;
-  }
-  else{
-    var alphaId = req.user.leaderUid;
-  }
-
-
+  var communityCode = req.user.communityCode;
 
   Cart.find({_id: req.user.id, products: {$elemMatch: {_productId: productId}}}, (err, data) => {
 
@@ -207,11 +195,11 @@ router.post("/delete", auth, async (req, res) => {
              });
          });
 
-         MasterCart.findOneAndUpdate({_id: alphaId, products: {$elemMatch: {_productId: productId}}}, {$inc: {"products.$.quantity":quantity}}, {new: true}, (err, data) => {
+         MasterCart.findOneAndUpdate({_id: communityCode, products: {$elemMatch: {_productId: productId}}}, {$inc: {"products.$.quantity":quantity}}, {new: true}, (err, data) => {
 
            if((data["products"].find(product => product._productId === productId).quantity) <= 0) {
 
-             MasterCart.update({_id: alphaId}, {$pull: {"products": {"_productId": productId}}})
+             MasterCart.update({_id: communityCode}, {$pull: {"products": {"_productId": productId}}})
                    .then(oCart => {
                            res.send(oCart);
                         }).catch(err => {
@@ -238,7 +226,7 @@ router.post("/delete", auth, async (req, res) => {
 
 
 
-            MasterCart.updateOne({_id: alphaId}, {$inc: {"total":(quantity*price)}})
+            MasterCart.updateOne({_id: communityCode}, {$inc: {"total":(quantity*price)}})
                 .then(oCart => {
                         res.send(oCart);
                      }).catch(err => {
