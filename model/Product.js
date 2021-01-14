@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const ProductSchema = mongoose.Schema({
     _id: {
       type: mongoose.ObjectId,
-      required: true
+      default: mongoose.Types.ObjectId(),
+      auto: true
     },
     brand: {
         type: String
