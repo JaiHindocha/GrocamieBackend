@@ -302,6 +302,39 @@ router.post("/import", async (req, res) => {
 
     else{
     count+=1
+    if (row["_id"] == ''){
+      async function asyncCall() {
+        try{
+            id = row["_id"].slice(9,33);
+            const product = new Product({
+              name : row["name"],
+              brand : row["brand"],
+              manufacturer : row["manufacturer"],
+              PriorityIndex : row["PriorityIndex"],
+              category : row["category"],
+              sp : row["sp"],
+              marginP : row["margin%"],
+              mrp : row["mrp"],
+              DealerPrice : row["DealerPrice"],
+              discount : row["discount"],
+              gst : row["gst"],
+              weight : row["weight"],
+              availability : row["availability"],
+              description : row["description"],
+              imageUrl : row["imageUrl"],
+              productImageUrl : row["productImageUrl"] });
+
+            await product.save();
+
+        }
+        catch(e){
+          console.log(e);
+        }
+      }
+
+      asyncCall();
+    }
+    else{
     async function asyncCall() {
       try{
           id = row["_id"].slice(9,33);
@@ -337,7 +370,7 @@ router.post("/import", async (req, res) => {
     // var size = Object.size(row);
     // console.log(size);
   }
-
+}
   })
   .on('end', () => {
     console.log(count)
