@@ -279,6 +279,9 @@ router.post("/import", async (req, res) => {
 };
 
 // Get the size of an object
+     
+   var obj = {}
+   obj["empty"] = []
 
 
   try{
@@ -297,7 +300,7 @@ router.post("/import", async (req, res) => {
   .on('data', (row) => {
     empty += 1
     if (row["name"] == '' || row["name"] == "name"){
-      console.log(empty);
+      obj["empty"].push(empty);
     }
 
     else{
@@ -373,7 +376,9 @@ router.post("/import", async (req, res) => {
 }
   })
   .on('end', () => {
-    console.log(count)
+    obj["count"] = count;
+    obj["done"] = "done";   
+    res.send(obj);   
 
   });
 
