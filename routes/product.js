@@ -282,6 +282,7 @@ router.post("/import", async (req, res) => {
      
    var obj = {}
    obj["empty"] = []
+   obj["newId"] = []  
 
 
   try{
@@ -308,7 +309,6 @@ router.post("/import", async (req, res) => {
     if (row["_id"] == ''){
       async function asyncCall() {
         try{
-            id = row["_id"].slice(9,33);
             const product = new Product({
               name : row["name"],
               brand : row["brand"],
@@ -328,6 +328,7 @@ router.post("/import", async (req, res) => {
               productImageUrl : row["productImageUrl"] });
 
             await product.save();
+            obj["newId"].push(product.id) 
 
         }
         catch(e){
