@@ -326,9 +326,9 @@ router.post("/import", async (req, res) => {
               description : row["description"],
               imageUrl : row["imageUrl"],
               productImageUrl : row["productImageUrl"] });
-
-            await product.save();
+            
             obj["newId"].push(product.id); 
+            await product.save();
 
         }
         catch(e){
