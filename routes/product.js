@@ -286,7 +286,7 @@ router.post("/import", async (req, res) => {
     console.log("Products Deleted");
   }
   catch(e){
-    console.log(e);
+    res.send(e);
   }
   var empty = 0
   var count = 0
@@ -328,7 +328,7 @@ router.post("/import", async (req, res) => {
 
         }
         catch(e){
-          console.log(e);
+          res.send(e);
         }
       }
 
@@ -361,7 +361,7 @@ router.post("/import", async (req, res) => {
 
       }
       catch(e){
-        console.log(e);
+        res.send(e);
       }
     }
 
@@ -374,7 +374,6 @@ router.post("/import", async (req, res) => {
   })
   .on('end', () => {
     console.log(count)
-    res.send("Done")
 
   });
 
