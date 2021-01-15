@@ -280,9 +280,9 @@ router.post("/import", async (req, res) => {
 
 // Get the size of an object
      
-   var obj = {}
-   obj["empty"] = []
-   obj["newId"] = []  
+   var obj = {};
+   obj["empty"] = [];
+   obj["newId"] = [];  
 
 
   try{
@@ -328,7 +328,7 @@ router.post("/import", async (req, res) => {
               productImageUrl : row["productImageUrl"] });
 
             await product.save();
-            obj["newId"].push(product._id) 
+            obj["newId"].push(product._id); 
 
         }
         catch(e){
