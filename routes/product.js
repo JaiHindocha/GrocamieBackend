@@ -158,9 +158,9 @@ router.post("/get", async(req, res) => {
     dbReq = await Product.aggregate(
       [
         {$match: { $text: {$search: search}, availability: "Y"}},
-        {$addFields: {sortValue:{$add: [{$meta: "textScore"}, {$divide: ["$PriorityIndex", 10]}]}}},
+        {$addFields: {sortValue:{$add: [{$meta: "textScore"}, {$divide: ["$PriorityIndex", 5]}]}}},
         {$sort: {sortValue:-1}},
-        { $match: { sortValue: { $gt: 0.5 } } },
+        { $match: { sortValue: { $gt: 1.0 } } },
         {$skip: skips},
         {$limit: itemsPerPage}
       ]
