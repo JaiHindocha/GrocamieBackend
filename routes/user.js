@@ -79,7 +79,7 @@ router.post(
         payload,
         "randomString",
         {
-          expiresIn: 10000
+          expiresIn: 604800
         },
         (err, token) => {
           if (err) throw err;
@@ -141,7 +141,7 @@ router.post(
         payload,
         "randomString",
         {
-          expiresIn: 36000
+          expiresIn: 604800
         },
         (err, token) => {
           if (err) throw err;
