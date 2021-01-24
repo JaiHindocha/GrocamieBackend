@@ -1,53 +1,63 @@
 const mongoose = require("mongoose");
 
 const ProductSchema = mongoose.Schema({
-    name: {
-        type: String,
-        required: true
+    _id: {
+      type: mongoose.ObjectId,
+      default: mongoose.Types.ObjectId(),
+      auto: true
     },
     brand: {
-        type: String,
-        required: true
+        type: String
     },
     manufacturer: {
-        type: String,
-        required: true
-    },
-    category: {
-        type: String,
-        required: true
-    },
-    sp: {
-        type: Number
-    },
-    mrp: {
-        type: Number
-    },
-    dealerPrice: {
-        type: Number
-    },
-    discount: {
-        type: Number
+        type: String
     },
     gst: {
         type: Number
     },
-    weight: {
-        type: String,
-        required: true
+    PriorityIndex: {
+      type: Number
+    },
+    dealerPrice: {
+        type: Number
+    },
+    margin: {
+      type: String
+    },
+    marginP: {
+      type: String
+    },
+    availability:{
+      type: String
+    },
+    category: {
+        type: String
     },
     description: {
-        type: String,
-        required: true
+        type: String
+    },
+    discount: {
+        type: Number
     },
     imageUrl: {
         type: String
     },
+    mrp: {
+        type: Number
+    },
+    name: {
+        type: String,
+        required: true
+    },
     productImageUrl: {
         type: String
     },
-    keywords: {
-        type: [String]
+    sp: {
+        type: Number
+        // required: true
+    },
+    weight: {
+        type: String
     },
     createdAt: {
         type: Date,
