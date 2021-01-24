@@ -25,7 +25,7 @@ router.post(
       });
     }
 
-    const {address,alpha,email,communityCode,name,profileUrl,verified,password} = req.body;
+    const {address,alpha,email,communityCode,communityName,contactNo,name,profileUrl,verified,password} = req.body;
     try {
       let user = await User.findOne({
         email
@@ -41,6 +41,8 @@ router.post(
         alpha,
         email,
         communityCode,
+        communityName,
+        contactNo,
         name,
         profileUrl,
         verified,

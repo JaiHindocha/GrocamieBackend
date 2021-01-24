@@ -16,6 +16,13 @@ const UserSchema = mongoose.Schema({
     communityCode: {
         type: String
     },
+    communityName: {
+        type: String
+    },
+    contactNo: {
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         required: true
