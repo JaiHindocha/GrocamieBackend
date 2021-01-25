@@ -8,6 +8,7 @@ const auth = require("../middleware/auth");
 const User = require("../model/User");
 const Cart = require("../model/Cart");
 const MasterCart = require("../model/MasterCart")
+const Community = require("../model/Community");
 
 router.post(
   "/signup",
@@ -53,6 +54,40 @@ router.post(
       user.password = await bcrypt.hash(password, salt);
 
       await user.save();
+
+      if (user.alpha == false) {
+        var conditions = {communityCode: user.communityCode};
+        var push = {$push: {requests: user.id}};
+
+        Community.update(conditions, push).then(doc => {
+            if (!doc) {return res.status(404).end();}
+            // return res.status(200).json(doc);
+            console.log('yes');
+
+        })
+        .catch(err => next(err));
+        User.update({_id:user.id},{communityCode:''}).then(doc => {
+          if (!doc) {return res.status(404).end();}
+          // return res.status(200).json(doc);
+          console.log('yes');
+
+        })
+        .catch(err => next(err));
+
+        user.communityCode='';
+      }
+
+      else{
+        var conditions = {communityCode: user.communityCode};
+        var push = {$push: {betaUsers: user.id}};
+
+        Community.update(conditions,push).then(doc => {
+            if (!doc) {return res.status(404).end();}
+            console.log('yes');
+            // return res.status(200).json(doc);
+        })
+        .catch(err => next(err));
+      }
 
       const payload = {
         user: {

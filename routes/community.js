@@ -6,6 +6,7 @@ const router = express.Router();
 const auth = require("../middleware/auth");
 
 const Community = require("../model/Community");
+const User = require("../model/User");
 
 router.post(
   "/create",[],
@@ -16,15 +17,6 @@ router.post(
         errors: errors.array()
       });
     }
-
-    // {
-    //   leaderUid:,
-    //   betaUsers:,
-    //   name:,
-    //   requests:,
-    //   closingTime:
-    // }
-
 
     const {communityCode,betaUsers,name,requests,closingTime} = req.body;
     try {
@@ -54,12 +46,8 @@ router.put(
   "/setClosingTime",
   function (req, res) {
     if(req.user.alpha==1){
-      var conditions = {_id: req.body.communityid};
+      var conditions = {_id: req.user.communityCode};
       var set = {$set:{closingTime:req.body.closingTime}};
-      // {
-      //   "communityid":"",
-      //   "closingTime":""
-      // }
       Community.update(conditions, set).then(doc => {
           if (!doc) {return res.status(404).end();}
           return res.status(200).json(doc);
@@ -71,9 +59,9 @@ router.put(
 
 router.get("/closingTime", auth, async (req, res) => {
   try {
-      const user = await Community.find({communityid:req.body.communityid});
-      if(user && user.length){
-          res.json(closingTime);
+      const time = await Community.find({communityCode:req.user.communityCode},{closingTime:1});
+      if(time && time.length){
+          res.json(time);
       }
       else{
           res.json("0 (no closing time)");
@@ -83,24 +71,6 @@ router.get("/closingTime", auth, async (req, res) => {
        res.send({ message: "Error in Fetching user" });
   }
 });
-
-router.put(
-  "/sendRequest",
-  function (req, res) {
-    // {
-    //   communityCode:
-    //   userId:
-    // }
-    var conditions = {communityCode: req.body.communityCode};
-    var push = {$push: {requests: req.body.userId}};
-
-    Community.update(conditions, push).then(doc => {
-        if (!doc) {return res.status(404).end();}
-        return res.status(200).json(doc);
-    })
-    .catch(err => next(err));
-  }
-);
 
 router.put(
     "/approve",[],auth,
@@ -118,30 +88,21 @@ router.put(
           return res.status(200).json(doc);
       })
       .catch(err => next(err));
+
       Community.update(conditions,pull).then(doc => {
         if (!doc) {return res.status(404).end();}
         return res.status(200).json(doc);
-    })
-    .catch(err => next(err));
+      })
+      .catch(err => next(err));
+      
+      User.update({_id:req.body.id},{communityCode:req.user.communityCode}).then(doc => {
+        if (!doc) {return res.status(404).end();}
+        return res.status(200).json(doc);
+      })
+      .catch(err => next(err));
     }
   }
   );
-
-router.put(
-    "/addLeader",[],auth,
-    async (req, res) => {
-      if(req.user.alpha==1){
-        var conditions = {communityCode: req.user.communityCode};
-        var push = {$push: {betaUsers: req.user.id}};
-
-      Community.update(conditions,push).then(doc => {
-          if (!doc) {return res.status(404).end();}
-          return res.status(200).json(doc);
-      })
-      .catch(err => next(err));
-      }
-    }
-);
 
 router.get("/requests", auth, async (req, res) => {
   if(req.user.alpha==1){
