@@ -50,23 +50,6 @@ router.post(
   }
 );
 
-// router.put(
-//     "/addLeader",
-//     function (req, res) {
-//       var conditions = {_id: req.body.communityid};
-//       var set = {$set:{leaderUid:req.body.leaderUid}};
-//       // {
-//       //   "leaderUid":"",
-//       //   "comunityid":""
-//       // }
-//       Community.update(conditions, set).then(doc => {
-//           if (!doc) {return res.status(404).end();}
-//           return res.status(200).json(doc);
-//       })
-//       .catch(err => next(err));
-//     }
-// );
-
 router.put(
   "/setClosingTime",
   function (req, res) {
