@@ -161,7 +161,7 @@ router.put(
 router.get("/requests", auth, async (req, res) => {
   if(req.user.alpha==1){
     try {
-      const user = await Community.find({leaderUid:req.user.id},{requests:1});
+      const user = await Community.find({communityCode:req.user.id},{requests:1});
       res.json(user);
     } catch (e) {
       res.send({ message: "Error in Fetching user" });
@@ -170,6 +170,15 @@ router.get("/requests", auth, async (req, res) => {
   else{
     res.json({ message: "Not alpha user" })
   }
+});
+
+router.get("/members", auth, async (req, res) => {
+    try {
+      const user = await Community.find({leaderUid:req.user.id},{requests:1});
+      res.json(user);
+    } catch (e) {
+      res.send({ message: "Error in Fetching user" });
+    }
 });
 
 module.exports = router;
