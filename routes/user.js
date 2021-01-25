@@ -25,7 +25,7 @@ router.post(
       });
     }
 
-    const {address,alpha,email,leaderEmail,leaderUid,name,profileUrl,verified,password} = req.body;
+    const {address,alpha,email,communityCode,communityName,contactNo,name,profileUrl,verified,password} = req.body;
     try {
       let user = await User.findOne({
         email
@@ -40,8 +40,9 @@ router.post(
         address,
         alpha,
         email,
-        leaderEmail,
-        leaderUid,
+        communityCode,
+        communityName,
+        contactNo,
         name,
         profileUrl,
         verified,
@@ -57,7 +58,7 @@ router.post(
         user: {
           id: user.id,
           alpha: user.alpha,
-          leaderUid: user.leaderUid,
+          communityCode: user.communityCode,
           name: user.name
         }
       };
@@ -70,7 +71,7 @@ router.post(
 
       if (user.alpha == true) {
         masterCart = new MasterCart ({
-          _id: user.id
+          _id: user.communityCode
         });
         await masterCart.save();
       }
@@ -79,7 +80,7 @@ router.post(
         payload,
         "randomString",
         {
-          expiresIn: 604800
+          expiresIn: 10000
         },
         (err, token) => {
           if (err) throw err;
@@ -132,7 +133,7 @@ router.post(
         user: {
           id: user.id,
           alpha: user.alpha,
-          leaderUid: user.leaderUid,
+          communityCode: user.communityCode,
           name: user.name
         }
       };
@@ -141,7 +142,7 @@ router.post(
         payload,
         "randomString",
         {
-          expiresIn: 604800
+          expiresIn: 36000
         },
         (err, token) => {
           if (err) throw err;

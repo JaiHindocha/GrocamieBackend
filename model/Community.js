@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const CommunitySchema = mongoose.Schema({
-    leaderUid: {
+    communityCode: {
         type: String
     },
     betaUsers: {
