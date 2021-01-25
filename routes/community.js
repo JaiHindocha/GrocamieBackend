@@ -105,10 +105,11 @@ router.put(
   "/sendRequest",
   function (req, res) {
     // {
-    //   communityid:
+    //   communityCode:
+    //   userId:
     // }
-    var conditions = {_id: req.body.communityid};
-    var push = {$push: {requests: req.body.communityid}};
+    var conditions = {communityCode: req.body.communityCode};
+    var push = {$push: {requests: req.body.userId}};
 
     Community.update(conditions, push).then(doc => {
         if (!doc) {return res.status(404).end();}
@@ -143,6 +144,22 @@ router.put(
   }
   );
 
+router.put(
+    "/addLeader",[],auth,
+    async (req, res) => {
+      if(req.user.alpha==1){
+        var conditions = {communityCode: req.user.communityCode};
+        var push = {$push: {betaUsers: req.user.id}};
+
+      Community.update(conditions,push).then(doc => {
+          if (!doc) {return res.status(404).end();}
+          return res.status(200).json(doc);
+      })
+      .catch(err => next(err));
+      }
+    }
+);
+
 router.get("/requests", auth, async (req, res) => {
   if(req.user.alpha==1){
     try {
@@ -155,6 +172,15 @@ router.get("/requests", auth, async (req, res) => {
   else{
     res.json({ message: "Not alpha user" })
   }
+});
+
+router.get("/members", auth, async (req, res) => {
+    try {
+      const user = await Community.find({communityCode: req.user.communityCode},{betaUsers:1});
+      res.json(user);
+    } catch (e) {
+      res.send({ message: "Error in Fetching user" });
+    }
 });
 
 module.exports = router;
