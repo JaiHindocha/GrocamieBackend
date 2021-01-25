@@ -519,8 +519,7 @@ router.get("/products", auth, async (req, res) => {
 router.put(
   "/updateProduct",
   function (req, res) {
-
-    var conditions = {_id:productId};
+    var conditions = {_id:req.body.productId};
     var set = {$set:{"req.body.field":"req.body.newVal"}};
 
     Product.update(conditions, set).then(doc => {
@@ -560,9 +559,7 @@ router.post("/addManufacturer",
 );
 
 router.put(
-  "/assignManufacturer",
-  function (req, res) {
- 
+  "/assignManufacturer",[],auth,async (req, res) => {
     var conditions = {_id: req.user._id};
     var push = {$push: {manufacturer: req.body.manufacturerId}};
 

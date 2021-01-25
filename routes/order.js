@@ -7,15 +7,11 @@ const url = require('url');
 const jwt = require("jsonwebtoken");
 const auth = require("../../GrocamieBackend/middleware/auth");
 
-
-
 const Cart = require("../model/Cart");
 const Community = require("../../GrocamieBackend/model/Community");
 const MasterOrder = require("../model/MasterOrder");
 const Order = require("../model/Order");
 const MasterCart = require("../model/MasterCart");
-
-
 
 router.post("/create", auth, async (req, res) => {
 

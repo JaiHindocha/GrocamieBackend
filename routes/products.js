@@ -15,5 +15,5 @@ router.get(
            message: err.message || "Some error occurred while retrieving the product."
        });
    });
-};
-)
+    }
+);
