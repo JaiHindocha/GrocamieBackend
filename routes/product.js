@@ -23,7 +23,7 @@ router.get("/all",async (req, res) => {
 
 router.post("/productById", async (req, res) => {
   try {
-    const user = await User.find({_id:req.body.id});
+    const user = await Product.find({_id:req.body.id});
     res.json(user);
   }
   catch (e) {
