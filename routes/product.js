@@ -21,16 +21,14 @@ router.get("/all",async (req, res) => {
      });
 });
 
-
-router.get("/productById",async (req, res) => {
-  Product.find({'_id':'req.body.id'})
-      .then(oProduct => {
-          res.send(oProduct);
-      }).catch(err => {
-      res.status(500).send({
-          message: err.message || "Some error occurred while retrieving the product."
-      });
-  });
+router.post("/productById", async (req, res) => {
+  try {
+    const user = await User.find({_id:req.body.id});
+    res.json(user);
+  }
+  catch (e) {
+    res.send({ message: "Error in Fetching user" });
+  }
 });
 
 // router.get("/get", async (req, res) => {
