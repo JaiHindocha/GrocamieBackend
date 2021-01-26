@@ -77,18 +77,6 @@ router.post(
         user.communityCode='';
       }
 
-      else{
-        var conditions = {communityCode: user.communityCode};
-        var push = {$push: {betaUsers: user.id}};
-
-        Community.update(conditions,push).then(doc => {
-            if (!doc) {return res.status(404).end();}
-            console.log('yes');
-            // return res.status(200).json(doc);
-        })
-        .catch(err => next(err));
-      }
-
       const payload = {
         user: {
           id: user.id,

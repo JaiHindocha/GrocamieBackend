@@ -18,9 +18,34 @@ router.post(
       });
     }
 
-    const {communityCode,betaUsers,name,requests,closingTime} = req.body;
-    try {
+    const {betaUsers,name,requests,closingTime} = req.body;
+    function makeid(length) {
+      var result           = '';
+      var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      var charactersLength = characters.length;
+      for ( var i = 0; i < length; i++ ) {
+         result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      try {
+        const comm = await Community.find({communityCode:result});
+        if(comm && comm.length){
+          var result           = '';
+          var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+          var charactersLength = characters.length;
+          for ( var i = 0; i < length; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+          }
+        }
+      }
+      catch (e) {
+        res.send({ message: "Error in Fetching user" });
+      }
+      return result;
+    }
+   
+    var communityCode = makeid(5);
 
+    try {
       community = new Community({
         communityCode,
         betaUsers,
@@ -30,6 +55,16 @@ router.post(
       });
 
       await community.save();
+      var conditions = {communityCode: user.communityCode};
+      var push = {$push: {betaUsers: user.id}};
+
+      Community.update(conditions,push).then(doc => {
+            if (!doc) {return res.status(404).end();}
+            console.log('yes');
+            // return res.status(200).json(doc);
+      })
+      .catch(err => next(err));
+      
       res.status(200).json({
         community
       });
