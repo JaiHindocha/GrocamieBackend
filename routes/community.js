@@ -26,20 +26,6 @@ router.post(
       for ( var i = 0; i < length; i++ ) {
          result += characters.charAt(Math.floor(Math.random() * charactersLength));
       }
-      try {
-        const comm = await Community.find({communityCode:result});
-        if(comm && comm.length){
-          var result           = '';
-          var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-          var charactersLength = characters.length;
-          for ( var i = 0; i < length; i++ ) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
-          }
-        }
-      }
-      catch (e) {
-        res.send({ message: "Error in Fetching user" });
-      }
       return result;
     }
    
@@ -64,7 +50,7 @@ router.post(
             // return res.status(200).json(doc);
       })
       .catch(err => next(err));
-      
+
       res.status(200).json({
         community
       });
