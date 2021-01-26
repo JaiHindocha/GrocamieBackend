@@ -140,7 +140,7 @@ router.post(
         user: {
           id: user.id,
           alpha: user.alpha,
-          communityCode: user.communityCode,
+          communityCode: communityCode,
           name: user.name
         }
       };

@@ -51,7 +51,6 @@ router.post("/create", auth, async (req, res) => {
 
 
 router.post("/createMaster", auth, async (req, res) => {
-
   if (req.user.alpha == true){
 
     function func() {
@@ -60,7 +59,6 @@ router.post("/createMaster", auth, async (req, res) => {
 
     async function asyncCall() {
       const data = await func();
-      console.log(data);
       var productCart = data[0]["products"];
       var total = data[0]["total"];
 
