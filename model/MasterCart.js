@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const MasterCartSchema = mongoose.Schema({
     _id: {
-      type: mongoose.ObjectId,
+      type: String,
       required: true
     },
     products: [{

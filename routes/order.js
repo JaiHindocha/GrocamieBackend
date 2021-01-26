@@ -55,12 +55,12 @@ router.post("/createMaster", auth, async (req, res) => {
   if (req.user.alpha == true){
 
     function func() {
-      return (MasterCart.find({_id: req.user.id}));
-
+      return (MasterCart.find({_id: req.user.communityCode}));
     };
 
     async function asyncCall() {
       const data = await func();
+      console.log(data);
       var productCart = data[0]["products"];
       var total = data[0]["total"];
 
@@ -73,7 +73,7 @@ router.post("/createMaster", auth, async (req, res) => {
                     + currentdate.getSeconds();
 
       masterOrder = new MasterOrder({
-        _alphaId: req.user.id,
+        _alphaId: req.user.communityCode,
         timestamp: datetime,
         products: productCart,
         total: total

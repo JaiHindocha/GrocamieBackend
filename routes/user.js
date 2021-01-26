@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
 const auth = require("../middleware/auth");
+var mongoose = require('mongoose');
 
 const User = require("../model/User");
 const Cart = require("../model/Cart");
@@ -26,7 +27,7 @@ router.post(
       });
     }
 
-    const {address,alpha,email,communityCode,communityName,contactNo,name,profileUrl,verified,password} = req.body;
+    var {address,alpha,email,communityCode,communityName,contactNo,name,profileUrl,verified,password} = req.body;
     try {
       let user = await User.findOne({
         email
@@ -77,6 +78,64 @@ router.post(
         user.communityCode='';
       }
 
+      else{
+        // const {betaUsers,name,requests,closingTime} = req.body;
+        function makeid(length) {
+          var result           = '';
+          var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+          var charactersLength = characters.length;
+          for ( var i = 0; i < length; i++ ) {
+             result += characters.charAt(Math.floor(Math.random() * charactersLength));
+          }
+          return result;
+        }
+       
+        communityCode = makeid(5);
+        name = communityName;
+        var betaUsers = '';
+        var requests = '';
+        var closingTime = '';
+    
+        try {
+          community = new Community({
+            communityCode,
+            betaUsers,
+            name,
+            requests,
+            closingTime
+          });
+    
+          await community.save();
+
+          var conditions = {communityCode: communityCode};
+          var push = {$push: {betaUsers: user.id}};
+    
+          Community.update(conditions,push).then(doc => {
+                if (!doc) {return res.status(404).end();}
+                console.log('yes');
+                // return res.status(200).json(doc);
+          })
+          .catch(err => next(err));
+
+          User.update({_id:user.id},{communityCode:communityCode}).then(doc => {
+            if (!doc) {return res.status(404).end();}
+            console.log('yes');
+            // return res.status(200).json(doc);
+          })
+          .catch(err => next(err));
+
+          masterCart = new MasterCart ({
+            _id: communityCode
+          });
+          await masterCart.save();
+    
+        }
+        catch (err) {
+          console.log(err.message);
+          res.status(500).send("Error in Saving");
+        }
+      }
+
       const payload = {
         user: {
           id: user.id,
@@ -91,13 +150,6 @@ router.post(
       });
 
       await cart.save();
-
-      if (user.alpha == true) {
-        masterCart = new MasterCart ({
-          _id: user.communityCode
-        });
-        await masterCart.save();
-      }
 
       jwt.sign(
         payload,
