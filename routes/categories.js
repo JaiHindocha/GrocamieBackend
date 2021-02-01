@@ -24,5 +24,35 @@ router.get("/getAll",async (req, res) => {
     });
 });
 
+// router.post("/add",
+//   [],
+//   async (req, res) => {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//       return res.status(400).json({
+//         errors: errors.array()
+//       });
+//     }
+
+//     const {name, subcategories, img} = req.body;
+//     try {
+
+//       category = new Categories({
+//         name,
+//         subcategories,
+//         img
+//       });
+
+//       await category.save();
+
+//       res.status(200).json({});
+
+//     } catch (err) {
+//       console.log(err.message);
+//       res.status(500).send("Error in Saving");
+//     }
+//   }
+// );
+
 
 module.exports = router;

@@ -11,6 +11,14 @@ const cors = require('cors');
 
 const InitiateMongoServer = require("./config/db");
 
+const Razorpay = require('razorpay');
+
+const instance = new Razorpay({
+  key_id: 'rzp_live_nnHybgj06vaLi0',
+  key_secret: 'msCsKjZniUKZUMgdoOLLKDW2',
+});
+
+
 InitiateMongoServer();
 
 const app = express();
@@ -34,6 +42,16 @@ app.use("/community", community);
 app.use("/cart", cart);
 app.use("/order", order);
 
+
+app.post('/orders', (req, res) => {
+  instance.orders.create(req.body, (err, order) => {
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      res.json(order);
+    }
+  });
+});
 
 app.listen(PORT, (req, res) => {
   console.log(`Server Started at PORT ${PORT}`);
