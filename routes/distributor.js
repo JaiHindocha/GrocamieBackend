@@ -540,11 +540,12 @@ router.post("/addManufacturer",
       });
     }
 
-    const {name} = req.body;
+    const {name, communities} = req.body;
     try {
 
       manufacturer = new Manufacturer({
-        name
+        name,
+        communities
       });
 
       await manufacturer.save();

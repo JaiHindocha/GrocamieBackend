@@ -9,6 +9,7 @@ const fs = require('fs');
 
 
 const Product = require("../model/Product");
+const Manufacturer = require("../model/Manufacturer");
 
 router.get("/all",async (req, res) => {
      Product.find({})
@@ -78,12 +79,29 @@ router.post("/productById", async (req, res) => {
 
 router.post("/get", async(req, res) => {
 
-  const {search, category, sortKey, sortOrder, itemsPerPage, pageNo}= req.body;
+  const {search, category, sortKey, sortOrder, itemsPerPage, pageNo, community}= req.body;
+  
   var skips = itemsPerPage * (pageNo - 1)
   var agg = false
-
   let dbReq;
+
+  function func() {
+    return (Manufacturer.find({communities: community}, {_id:0, communities:0}));
+
+  };
+
+  
   try {
+
+   var data = await func();
+   
+   var deliver = data.map(function(data) {return data['name'];
+});
+
+  console.log(deliver);
+
+  
+ 
   if (!(search == null || search == "") && !(category == null || category == "")) {
 
     agg = true
@@ -94,7 +112,7 @@ router.post("/get", async(req, res) => {
 
       dbReq = await Product.aggregate(
         [
-          {$match: { $text: {$search: search}, category: category, availability: "Y"}},
+          {$match: { $text: {$search: search}, category: category, manufacturer: {$in: deliver}, availability: "Y"}},
           {$addFields: {sortValue:{$add: [{$meta: "textScore"}, {$divide: ["$PriorityIndex", 10]}]}}},
           {$sort: {sortValue:-1}},
           {$match: { sortValue: { $gt: 0.5 } } },
@@ -106,7 +124,7 @@ router.post("/get", async(req, res) => {
     else {
       dbReq = await Product.aggregate(
         [
-          {$match: { $text: {$search: search}, category: category, availability: "Y"}},
+          {$match: { $text: {$search: search}, category: category, manufacturer: {$in: deliver}, availability: "Y"}},
           {$addFields: {sortValue:{$add: [{$meta: "textScore"}, {$divide: ["$PriorityIndex", 10]}]}}},
           {$sort: {sortValue:-1}},
           {$match: { sortValue: { $gt: 0.5 } } },
@@ -123,12 +141,12 @@ router.post("/get", async(req, res) => {
     if (!(sortKey == null || sortKey == "")){
       var query = {};
       query[sortKey] = sortOrder;
-      dbReq = Product.find({category: category, availability: "Y"}).sort({PriorityIndex:-1});
+      dbReq = Product.find({category: category, manufacturer: {$in: deliver}, availability: "Y"}).sort({PriorityIndex:-1});
       dbReq = dbReq.sort(query).skip(skips).limit(itemsPerPage);
   }
 
     else{
-      dbReq = Product.find({category: category, availability: "Y"}).sort({PriorityIndex:-1});
+      dbReq = Product.find({category: category, manufacturer: {$in: deliver}, availability: "Y"}).sort({PriorityIndex:-1});
       dbReq = dbReq.skip(skips).limit(itemsPerPage);
 
     }
@@ -138,11 +156,11 @@ router.post("/get", async(req, res) => {
     if (!(sortKey == null || sortKey == "")){
       var query = {};
       query[sortKey] = sortOrder;
-      dbReq = Product.find({availability: "Y"}).sort({PriorityIndex:-1});
+      dbReq = Product.find({manufacturer: {$in: deliver}, availability: "Y"}).sort({PriorityIndex:-1});
       dbReq = dbReq.sort(query).skip(skips).limit(itemsPerPage);
     }
     else {
-      dbReq = Product.find({availability: "Y"}).sort({PriorityIndex:-1});
+      dbReq = Product.find({manufacturer: {$in: deliver}, availability: "Y"}).sort({PriorityIndex:-1});
       dbReq = dbReq.skip(skips).limit(itemsPerPage);
     }
 }
@@ -154,7 +172,7 @@ router.post("/get", async(req, res) => {
       query[sortKey] = sortOrder;
       dbReq = await Product.aggregate(
         [
-          {$match: { $text: {$search: search}, availability: "Y"}},
+          {$match: { $text: {$search: search}, manufacturer: {$in: deliver}, availability: "Y"}},
           {$addFields: {sortValue:{$add: [{$meta: "textScore"}, {$divide: ["$PriorityIndex", 10]}]}}},
           {$sort: {sortValue:-1}},
           { $match: { sortValue: { $gt: 0.5 } } },
@@ -167,7 +185,7 @@ router.post("/get", async(req, res) => {
   else{
     dbReq = await Product.aggregate(
       [
-        {$match: { $text: {$search: search}, availability: "Y"}},
+        {$match: { $text: {$search: search}, manufacturer: {$in: deliver}, availability: "Y"}},
         {$addFields: {sortValue:{$add: [{$meta: "textScore"}, {$divide: ["$PriorityIndex", 5]}]}}},
         {$sort: {sortValue:-1}},
         { $match: { sortValue: { $gt: 1.0 } } },
@@ -192,6 +210,7 @@ dbReq.then(oProduct => {
 else {
   res.json(dbReq);
 }
+
 }
 
 catch(e){

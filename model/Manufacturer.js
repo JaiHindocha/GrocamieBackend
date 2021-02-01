@@ -4,6 +4,9 @@ const ManufacturerSchema = mongoose.Schema({
     name: {
         type: String,
         required: true
+    },
+    communities: {
+        type: [String]
     }
 });
 
