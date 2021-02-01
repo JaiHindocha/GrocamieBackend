@@ -85,6 +85,10 @@ router.post("/get", async(req, res) => {
   var agg = false
   let dbReq;
 
+  if (category == "Biscuits, Snacks & Chocolates"){
+    category = "Confectionery and Snacks "
+  }
+
   function func() {
     return (Manufacturer.find({communities: community}, {_id:0, communities:0}));
 
@@ -459,6 +463,7 @@ router.post("/import", async (req, res) => {
               manufacturer : row["manufacturer"],
               PriorityIndex : row["PriorityIndex"],
               category : row["category"],
+              subCategory : row["subCategory"],
               sp : row["sp"],
               marginP : row["margin%"],
               mrp : row["mrp"],
@@ -493,6 +498,7 @@ router.post("/import", async (req, res) => {
             manufacturer : row["manufacturer"],
             PriorityIndex : row["PriorityIndex"],
             category : row["category"],
+            subCategory : row["subCategory"],
             sp : row["sp"],
             marginP : row["margin%"],
             mrp : row["mrp"],
