@@ -93,123 +93,238 @@ router.post("/get", async(req, res) => {
   
   try {
 
-   var data = await func();
+   
+  if  (!(community == null || community == "")){
+
+    var data = await func();
    
    var deliver = data.map(function(data) {return data['name'];
 });
 
-  console.log(deliver);
+    if (!(search == null || search == "") && !(category == null || category == "")) {
 
+      agg = true
   
- 
-  if (!(search == null || search == "") && !(category == null || category == "")) {
-
-    agg = true
-
-    if (!(sortKey == null || sortKey == "")){
-      var query = {};
-      query[sortKey] = sortOrder;
-
-      dbReq = await Product.aggregate(
-        [
-          {$match: { $text: {$search: search}, category: category, manufacturer: {$in: deliver}, availability: "Y"}},
-          {$addFields: {sortValue:{$add: [{$meta: "textScore"}, {$divide: ["$PriorityIndex", 10]}]}}},
-          {$sort: {sortValue:-1}},
-          {$match: { sortValue: { $gt: 0.5 } } },
-          {$sort: query},
-          {$skip: skips},
-          {$limit: itemsPerPage}
-          ]);
+      if (!(sortKey == null || sortKey == "")){
+        var query = {};
+        query[sortKey] = sortOrder;
+  
+        dbReq = await Product.aggregate(
+          [
+            {$match: { $text: {$search: search}, category: category, manufacturer: {$in: deliver}, availability: "Y"}},
+            {$addFields: {sortValue:{$add: [{$meta: "textScore"}, {$divide: ["$PriorityIndex", 10]}]}}},
+            {$sort: {sortValue:-1}},
+            {$match: { sortValue: { $gt: 0.5 } } },
+            {$sort: query},
+            {$skip: skips},
+            {$limit: itemsPerPage}
+            ]);
+      }
+      else {
+        dbReq = await Product.aggregate(
+          [
+            {$match: { $text: {$search: search}, category: category, manufacturer: {$in: deliver}, availability: "Y"}},
+            {$addFields: {sortValue:{$add: [{$meta: "textScore"}, {$divide: ["$PriorityIndex", 10]}]}}},
+            {$sort: {sortValue:-1}},
+            {$match: { sortValue: { $gt: 0.5 } } },
+            {$skip: skips},
+            {$limit: itemsPerPage}
+            ]);
+  
+      }
     }
+  
+  
+  
+    else if (!(category == "" || category == null)){
+      if (!(sortKey == null || sortKey == "")){
+        var query = {};
+        query[sortKey] = sortOrder;
+        dbReq = Product.find({category: category, manufacturer: {$in: deliver}, availability: "Y"}).sort({PriorityIndex:-1});
+        dbReq = dbReq.sort(query).skip(skips).limit(itemsPerPage);
+    }
+  
+      else{
+        dbReq = Product.find({category: category, manufacturer: {$in: deliver}, availability: "Y"}).sort({PriorityIndex:-1});
+        dbReq = dbReq.skip(skips).limit(itemsPerPage);
+  
+      }
+  }
+    else if ((category == "" || category == null) && (search == null || search == "")){
+  
+      if (!(sortKey == null || sortKey == "")){
+        var query = {};
+        query[sortKey] = sortOrder;
+        dbReq = Product.find({manufacturer: {$in: deliver}, availability: "Y"}).sort({PriorityIndex:-1});
+        dbReq = dbReq.sort(query).skip(skips).limit(itemsPerPage);
+      }
+      else {
+        dbReq = Product.find({manufacturer: {$in: deliver}, availability: "Y"}).sort({PriorityIndex:-1});
+        dbReq = dbReq.skip(skips).limit(itemsPerPage);
+      }
+  }
+  
     else {
-      dbReq = await Product.aggregate(
-        [
-          {$match: { $text: {$search: search}, category: category, manufacturer: {$in: deliver}, availability: "Y"}},
-          {$addFields: {sortValue:{$add: [{$meta: "textScore"}, {$divide: ["$PriorityIndex", 10]}]}}},
-          {$sort: {sortValue:-1}},
-          {$match: { sortValue: { $gt: 0.5 } } },
-          {$skip: skips},
-          {$limit: itemsPerPage}
-          ]);
-
-    }
-  }
-
-
-
-  else if (!(category == "" || category == null)){
-    if (!(sortKey == null || sortKey == "")){
-      var query = {};
-      query[sortKey] = sortOrder;
-      dbReq = Product.find({category: category, manufacturer: {$in: deliver}, availability: "Y"}).sort({PriorityIndex:-1});
-      dbReq = dbReq.sort(query).skip(skips).limit(itemsPerPage);
-  }
-
+      agg = true
+      if (!(sortKey == null || sortKey == "")){
+        var query = {};
+        query[sortKey] = sortOrder;
+        dbReq = await Product.aggregate(
+          [
+            {$match: { $text: {$search: search}, manufacturer: {$in: deliver}, availability: "Y"}},
+            {$addFields: {sortValue:{$add: [{$meta: "textScore"}, {$divide: ["$PriorityIndex", 10]}]}}},
+            {$sort: {sortValue:-1}},
+            { $match: { sortValue: { $gt: 0.5 } } },
+            {$sort: query},
+            {$skip: skips},
+            {$limit: itemsPerPage}
+          ]
+          );
+      }
     else{
-      dbReq = Product.find({category: category, manufacturer: {$in: deliver}, availability: "Y"}).sort({PriorityIndex:-1});
-      dbReq = dbReq.skip(skips).limit(itemsPerPage);
-
-    }
-}
-  else if ((category == "" || category == null) && (search == null || search == "")){
-
-    if (!(sortKey == null || sortKey == "")){
-      var query = {};
-      query[sortKey] = sortOrder;
-      dbReq = Product.find({manufacturer: {$in: deliver}, availability: "Y"}).sort({PriorityIndex:-1});
-      dbReq = dbReq.sort(query).skip(skips).limit(itemsPerPage);
-    }
-    else {
-      dbReq = Product.find({manufacturer: {$in: deliver}, availability: "Y"}).sort({PriorityIndex:-1});
-      dbReq = dbReq.skip(skips).limit(itemsPerPage);
-    }
-}
-
-  else {
-    agg = true
-    if (!(sortKey == null || sortKey == "")){
-      var query = {};
-      query[sortKey] = sortOrder;
       dbReq = await Product.aggregate(
         [
           {$match: { $text: {$search: search}, manufacturer: {$in: deliver}, availability: "Y"}},
-          {$addFields: {sortValue:{$add: [{$meta: "textScore"}, {$divide: ["$PriorityIndex", 10]}]}}},
+          {$addFields: {sortValue:{$add: [{$meta: "textScore"}, {$divide: ["$PriorityIndex", 5]}]}}},
           {$sort: {sortValue:-1}},
-          { $match: { sortValue: { $gt: 0.5 } } },
-          {$sort: query},
+          { $match: { sortValue: { $gt: 1.0 } } },
           {$skip: skips},
           {$limit: itemsPerPage}
         ]
         );
+  
     }
-  else{
-    dbReq = await Product.aggregate(
-      [
-        {$match: { $text: {$search: search}, manufacturer: {$in: deliver}, availability: "Y"}},
-        {$addFields: {sortValue:{$add: [{$meta: "textScore"}, {$divide: ["$PriorityIndex", 5]}]}}},
-        {$sort: {sortValue:-1}},
-        { $match: { sortValue: { $gt: 1.0 } } },
-        {$skip: skips},
-        {$limit: itemsPerPage}
-      ]
-      );
-
+  
+  }
+  
+  if (agg == false){
+  dbReq.then(oProduct => {
+    res.send(oProduct);
+  }).catch(err => {
+    res.status(500).send({
+      message: err.message || "Some error occurred while retrieving the product."
+    });
+  })
+  }
+  else {
+    res.json(dbReq);
   }
 
-}
+  }
+//////////////////////////////////////////////////////
+  else{
+    if (!(search == null || search == "") && !(category == null || category == "")) {
 
-if (agg == false){
-dbReq.then(oProduct => {
-  res.send(oProduct);
-}).catch(err => {
-  res.status(500).send({
-    message: err.message || "Some error occurred while retrieving the product."
-  });
-})
-}
-else {
-  res.json(dbReq);
-}
+      agg = true
+  
+      if (!(sortKey == null || sortKey == "")){
+        var query = {};
+        query[sortKey] = sortOrder;
+  
+        dbReq = await Product.aggregate(
+          [
+            {$match: { $text: {$search: search}, category: category, availability: "Y"}},
+            {$addFields: {sortValue:{$add: [{$meta: "textScore"}, {$divide: ["$PriorityIndex", 10]}]}}},
+            {$sort: {sortValue:-1}},
+            {$match: { sortValue: { $gt: 0.5 } } },
+            {$sort: query},
+            {$skip: skips},
+            {$limit: itemsPerPage}
+            ]);
+      }
+      else {
+        dbReq = await Product.aggregate(
+          [
+            {$match: { $text: {$search: search}, category: category, availability: "Y"}},
+            {$addFields: {sortValue:{$add: [{$meta: "textScore"}, {$divide: ["$PriorityIndex", 10]}]}}},
+            {$sort: {sortValue:-1}},
+            {$match: { sortValue: { $gt: 0.5 } } },
+            {$skip: skips},
+            {$limit: itemsPerPage}
+            ]);
+  
+      }
+    }
+  
+  
+  
+    else if (!(category == "" || category == null)){
+      if (!(sortKey == null || sortKey == "")){
+        var query = {};
+        query[sortKey] = sortOrder;
+        dbReq = Product.find({category: category, availability: "Y"}).sort({PriorityIndex:-1});
+        dbReq = dbReq.sort(query).skip(skips).limit(itemsPerPage);
+    }
+  
+      else{
+        dbReq = Product.find({category: category, availability: "Y"}).sort({PriorityIndex:-1});
+        dbReq = dbReq.skip(skips).limit(itemsPerPage);
+  
+      }
+  }
+    else if ((category == "" || category == null) && (search == null || search == "")){
+  
+      if (!(sortKey == null || sortKey == "")){
+        var query = {};
+        query[sortKey] = sortOrder;
+        dbReq = Product.find({availability: "Y"}).sort({PriorityIndex:-1});
+        dbReq = dbReq.sort(query).skip(skips).limit(itemsPerPage);
+      }
+      else {
+        dbReq = Product.find({availability: "Y"}).sort({PriorityIndex:-1});
+        dbReq = dbReq.skip(skips).limit(itemsPerPage);
+      }
+  }
+  
+    else {
+      agg = true
+      if (!(sortKey == null || sortKey == "")){
+        var query = {};
+        query[sortKey] = sortOrder;
+        dbReq = await Product.aggregate(
+          [
+            {$match: { $text: {$search: search}, availability: "Y"}},
+            {$addFields: {sortValue:{$add: [{$meta: "textScore"}, {$divide: ["$PriorityIndex", 10]}]}}},
+            {$sort: {sortValue:-1}},
+            { $match: { sortValue: { $gt: 0.5 } } },
+            {$sort: query},
+            {$skip: skips},
+            {$limit: itemsPerPage}
+          ]
+          );
+      }
+    else{
+      dbReq = await Product.aggregate(
+        [
+          {$match: { $text: {$search: search}, availability: "Y"}},
+          {$addFields: {sortValue:{$add: [{$meta: "textScore"}, {$divide: ["$PriorityIndex", 5]}]}}},
+          {$sort: {sortValue:-1}},
+          { $match: { sortValue: { $gt: 1.0 } } },
+          {$skip: skips},
+          {$limit: itemsPerPage}
+        ]
+        );
+  
+    }
+  
+  }
+  
+  if (agg == false){
+  dbReq.then(oProduct => {
+    res.send(oProduct);
+  }).catch(err => {
+    res.status(500).send({
+      message: err.message || "Some error occurred while retrieving the product."
+    });
+  })
+  }
+  else {
+    res.json(dbReq);
+  }
+  }
+  
+ 
+  
 
 }
 
