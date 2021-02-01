@@ -79,7 +79,7 @@ router.post("/productById", async (req, res) => {
 
 router.post("/get", async(req, res) => {
 
-  const {search, category, sortKey, sortOrder, itemsPerPage, pageNo, community}= req.body;
+  var {search, category, sortKey, sortOrder, itemsPerPage, pageNo, community}= req.body;
   
   var skips = itemsPerPage * (pageNo - 1)
   var agg = false
@@ -88,6 +88,8 @@ router.post("/get", async(req, res) => {
   if (category == "Biscuits, Snacks & Chocolates"){
     category = "Confectionery and Snacks "
   }
+
+  console.log(category);
 
   function func() {
     return (Manufacturer.find({communities: community}, {_id:0, communities:0}));
