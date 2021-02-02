@@ -23,7 +23,7 @@ router.get("/all",async (req, res) => {
 });
 
 router.get("/getBanners",async (req, res) => {
-  var banners = ["https://www.grocamie.com/img/Banner1@2x.png", "https://www.grocamie.com/img/Banner2@2x.png", "https://www.grocamie.com/img/Banner3@2x.png", "https://www.grocamie.com/img/Banner4@2x.png"]
+  var banners = ["https://www.grocamie.com/img/Banner#1@2x.png", "https://www.grocamie.com/img/Banner#2@2x.png", "https://www.grocamie.com/img/Banner#3@2x.png", "https://www.grocamie.com/img/Banner#4@2x.png"]
   res.send(banners);
 });
 
