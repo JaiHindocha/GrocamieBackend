@@ -79,7 +79,7 @@ router.post("/productById", async (req, res) => {
 
 router.post("/get", async(req, res) => {
 
-  var {search, category, sortKey, sortOrder, itemsPerPage, pageNo, community}= req.body;
+  var {search, category, sortKey, sortOrder, itemsPerPage, pageNo, community, searchType}= req.body;
   
   var skips = itemsPerPage * (pageNo - 1)
   var agg = false
@@ -89,7 +89,16 @@ router.post("/get", async(req, res) => {
     category = "Confectionery and Snacks "
   }
 
-  console.log(category);
+  if (searchType == "Best Seller"){
+    sortKey = "discount"
+    sortOrder = -1
+  }
+  else if (searchType == "Lowest Prices"){
+    sortKey = "sp"
+    sortOrder = 1
+  }
+
+
 
   function func() {
     return (Manufacturer.find({communities: community}, {_id:0, communities:0}));
