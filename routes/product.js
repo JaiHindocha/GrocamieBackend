@@ -22,6 +22,11 @@ router.get("/all",async (req, res) => {
      });
 });
 
+router.get("/getBanners",async (req, res) => {
+  var banners = ["www.grocamie.com/img/Banner1.png", "www.grocamie.com/img/Banner1@2x.png", "www.grocamie.com/img/Banner2.png", "www.grocamie.com/img/Banner2@2x.png", "www.grocamie.com/img/Banner3.png", "www.grocamie.com/img/Banner3@2x.png", "www.grocamie.com/img/Banner4.png", "www.grocamie.com/img/Banner4@2x.png", "www.grocamie.com/img/iPhoneXXS11Pro1.png", "www.grocamie.com/img/iPhoneXXS11Pro@2x.png"]
+  res.send(banners);
+});
+
 router.post("/productById", async (req, res) => {
   try {
     const user = await Product.find({_id:req.body.id});
@@ -554,3 +559,4 @@ router.post("/import", async (req, res) => {
 
 
 module.exports = router;
+// [{name:"Personal Care",subcategories:[{name:"Hair care",imgSub:"imageUrl"},{name:"Bath and handwash",imgSub:"imageUrl"},{name:"Oral Care",imgSub:"imageUrl"},{name:"Perfumes and deo",imgSub:"imageUrl"},{name:"Hygiene",imgSub:"imageUrl"},{name:"Skincare",imgSub:"imageUrl"},{name:"Health and medicine",imgSub:"imageUrl"}],img:"imageUrl"},{name:"Household items",subcategories:[{name:"Air fresheners",imgSub:"imageUrl"},{name:"Sanitizers and disinfectants",imgSub:"imageUrl"},{name:"Household cleaning",imgSub:"imageUrl"},{name:"Detergents",imgSub:"imageUrl"},{name:"Insect repellents",imgSub:"imageUrl"},{name:"Polish and wax",imgSub:"imageUrl"}],img:"imageUrl"},{name:"Beverages",subcategories:[{name:"Tea and coffee",imgSub:"imageUrl"},{name:"Health drinks",imgSub:"imageUrl"},{name:"Aerated Drinks",imgSub:"imageUrl"}],img:"imageUrl"},{name:"Breakfast & Dairy",subcategories:[{name:"Dairy",imgSub:"imageUrl"},{name:"Cereals",imgSub:"imageUrl"}],img:"imageUrl"},{name:"Grocery & Staples",subcategories:[{name:"Jams, honey and spreads",imgSub:"imageUrl"},{name:"Edible oil",imgSub:"imageUrl"},{name:"Masalas and spices",imgSub:"imageUrl"},{name:"Atta, Rice and Pulses",imgSub:"imageUrl"}],img:"imageUrl"},{name:"Noodles, Sauces & Instant Food",subcategories:[{name:"Noodles and pasta",imgSub:"imageUrl"},{name:"Soups and sauces",imgSub:"imageUrl"},{name:"Instant food",imgSub:"imageUrl"}],img:"imageUrl"},{name:"Confectionery & Snacks",subcategories:[{name:"Sweets",imgSub:"imageUrl"}],img:"imageUrl"}]
