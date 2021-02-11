@@ -6,6 +6,7 @@ const product = require("./routes/product"); //new addition
 const community = require("./routes/community");
 const categories = require("./routes/categories"); //new addition
 const cart = require("./routes/cart");
+const fcm = require("./routes/fcm");
 const order = require("./routes/order");
 const cors = require('cors');
 
@@ -43,6 +44,7 @@ app.use("/community", community);
 app.use("/cart", cart);
 app.use("/order", order);
 app.use("/categories", categories);
+app.use("/fcm", fcm)
 
 
 app.post('/orders', (req, res) => {
