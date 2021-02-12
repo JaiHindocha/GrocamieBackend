@@ -11,7 +11,8 @@ const fs = require('fs');
 
 router.post("/send", async(req, res) =>{
     res.header('Content-Type', "application/json");
-    res.header('Authorization', "key=$SERVER_KEY");
+    res.header('Authorization', "key=AAAAZTt3e3w:APA91bHR9lVHIpEE9y9efNkD6L6RQ1HgTf9uttDOjvepznYhMXcjU29JDdcOl5y1Ot6eU4M0o530e5nL4UdPem6X-XUySUPQA5NKSnfsTMOeTgBFzeSna-GHM950BEsOejFQnqzjB-zM");
+    console.log(res._headers)
     res.redirect('https://fcm.googleapis.com/fcm/send')
 
 
