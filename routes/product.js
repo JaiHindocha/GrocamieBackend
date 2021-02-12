@@ -94,7 +94,7 @@ router.post("/get", async(req, res) => {
     category = "Confectionery and Snacks "
   }
 
-  if (category == "Confectionery and Snacks"){
+  if (category == "Confectionery & Snacks"){
     category = "Confectionery and Snacks "
   }
 
