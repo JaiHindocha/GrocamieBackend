@@ -16,8 +16,8 @@ const InitiateMongoServer = require("./config/db");
 const Razorpay = require('razorpay');
 
 const instance = new Razorpay({
-  key_id: 'rzp_live_EXuMe0xxkkyLZt',
-  key_secret: '3yLa2rIp38JN17i4fGyNFo1e',
+  key_id: 'rzp_test_WJ3M1n6O5zfcNM',
+  key_secret: 'kFNZUEjBagdtcJtPUG17qcpW',
 });
 
 
