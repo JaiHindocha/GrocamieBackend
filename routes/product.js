@@ -84,7 +84,7 @@ router.post("/productById", async (req, res) => {
 
 router.post("/get", async(req, res) => {
 
-  var {search, category, sortKey, sortOrder, itemsPerPage, pageNo, community, searchType}= req.body;
+  var {search, category, subCategory, sortKey, sortOrder, itemsPerPage, pageNo, community, searchType}= req.body;
   
   var skips = itemsPerPage * (pageNo - 1)
   var agg = false
@@ -124,8 +124,23 @@ router.post("/get", async(req, res) => {
    
    var deliver = data.map(function(data) {return data['name'];
 });
+    if (!(subCategory == null || subCategory == "")) {
+      if (!(sortKey == null || sortKey == "")){
+        var query = {};
+        query[sortKey] = sortOrder;
+        dbReq = Product.find({subCategory: subCategory, manufacturer: {$in: deliver}, availability: "Y"}).sort({PriorityIndex:-1});
+        dbReq = dbReq.sort(query).skip(skips).limit(itemsPerPage);
+    }
+  
+      else{
+        dbReq = Product.find({subCategory: subCategory, manufacturer: {$in: deliver}, availability: "Y"}).sort({PriorityIndex:-1});
+        dbReq = dbReq.skip(skips).limit(itemsPerPage);
+  
+      }
 
-    if (!(search == null || search == "") && !(category == null || category == "")) {
+    }
+
+    else if (!(search == null || search == "") && !(category == null || category == "")) {
 
       agg = true
   
@@ -209,7 +224,7 @@ router.post("/get", async(req, res) => {
       dbReq = await Product.aggregate(
         [
           {$match: { $text: {$search: search}, manufacturer: {$in: deliver}, availability: "Y"}},
-          {$addFields: {sortValue:{$add: [{$meta: "textScore"}, {$divide: ["$PriorityIndex", 5]}]}}},
+          {$addFields: {sortValue:{$add: [{$meta: "textScore"}, {$divide: ["$PriorityIndex", 10]}]}}},
           {$sort: {sortValue:-1}},
           { $match: { sortValue: { $gt: 1.0 } } },
           {$skip: skips},
@@ -237,7 +252,24 @@ router.post("/get", async(req, res) => {
   }
 //////////////////////////////////////////////////////
   else{
-    if (!(search == null || search == "") && !(category == null || category == "")) {
+
+    if (!(subCategory == null || subCategory == "")) {
+      if (!(sortKey == null || sortKey == "")){
+        var query = {};
+        query[sortKey] = sortOrder;
+        dbReq = Product.find({subCategory: subCategory, availability: "Y"}).sort({PriorityIndex:-1});
+        dbReq = dbReq.sort(query).skip(skips).limit(itemsPerPage);
+    }
+  
+      else{
+        dbReq = Product.find({subCategory: subCategory, availability: "Y"}).sort({PriorityIndex:-1});
+        dbReq = dbReq.skip(skips).limit(itemsPerPage);
+  
+      }
+
+    }
+
+    else if (!(search == null || search == "") && !(category == null || category == "")) {
 
       agg = true
   
