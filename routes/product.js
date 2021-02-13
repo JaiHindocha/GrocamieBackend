@@ -106,7 +106,9 @@ router.post("/get", async(req, res) => {
     sortKey = "sp"
     sortOrder = 1
   }
-
+  else if (searchType == "Local"){
+    manufacturer = ""
+  }
 
 
   function func() {
@@ -124,23 +126,23 @@ router.post("/get", async(req, res) => {
    
    var deliver = data.map(function(data) {return data['name'];
 });
-    // if (!(subCategory == null || subCategory == "")) {
-    //   if (!(sortKey == null || sortKey == "")){
-    //     var query = {};
-    //     query[sortKey] = sortOrder;
-    //     dbReq = Product.find({subCategory: subCategory, manufacturer: {$in: deliver}, availability: "Y"}).sort({PriorityIndex:-1});
-    //     dbReq = dbReq.sort(query).skip(skips).limit(itemsPerPage);
-    // }
+    if (!(subCategory == null || subCategory == "")) {
+      if (!(sortKey == null || sortKey == "")){
+        var query = {};
+        query[sortKey] = sortOrder;
+        dbReq = Product.find({subCategory: subCategory, manufacturer: {$in: deliver}, availability: "Y"}).sort({PriorityIndex:-1});
+        dbReq = dbReq.sort(query).skip(skips).limit(itemsPerPage);
+    }
   
-    //   else{
-    //     dbReq = Product.find({subCategory: subCategory, manufacturer: {$in: deliver}, availability: "Y"}).sort({PriorityIndex:-1});
-    //     dbReq = dbReq.skip(skips).limit(itemsPerPage);
+      else{
+        dbReq = Product.find({subCategory: subCategory, manufacturer: {$in: deliver}, availability: "Y"}).sort({PriorityIndex:-1});
+        dbReq = dbReq.skip(skips).limit(itemsPerPage);
   
-    //   }
+      }
 
-    // }
+    }
 
-    if (!(search == null || search == "") && !(category == null || category == "")) {
+    else if (!(search == null || search == "") && !(category == null || category == "")) {
 
       agg = true
   
@@ -253,23 +255,23 @@ router.post("/get", async(req, res) => {
 //////////////////////////////////////////////////////
   else{
 
-    // if (!(subCategory == null || subCategory == "")) {
-    //   if (!(sortKey == null || sortKey == "")){
-    //     var query = {};
-    //     query[sortKey] = sortOrder;
-    //     dbReq = Product.find({subCategory: subCategory, availability: "Y"}).sort({PriorityIndex:-1});
-    //     dbReq = dbReq.sort(query).skip(skips).limit(itemsPerPage);
-    // }
+    if (!(subCategory == null || subCategory == "")) {
+      if (!(sortKey == null || sortKey == "")){
+        var query = {};
+        query[sortKey] = sortOrder;
+        dbReq = Product.find({subCategory: subCategory, availability: "Y"}).sort({PriorityIndex:-1});
+        dbReq = dbReq.sort(query).skip(skips).limit(itemsPerPage);
+    }
   
-    //   else{
-    //     dbReq = Product.find({subCategory: subCategory, availability: "Y"}).sort({PriorityIndex:-1});
-    //     dbReq = dbReq.skip(skips).limit(itemsPerPage);
+      else{
+        dbReq = Product.find({subCategory: subCategory, availability: "Y"}).sort({PriorityIndex:-1});
+        dbReq = dbReq.skip(skips).limit(itemsPerPage);
   
-    //   }
+      }
 
-    // }
+    }
 
-    if (!(search == null || search == "") && !(category == null || category == "")) {
+    else if (!(search == null || search == "") && !(category == null || category == "")) {
 
       agg = true
   
