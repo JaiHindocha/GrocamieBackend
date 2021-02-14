@@ -30,6 +30,9 @@ const ProductSchema = mongoose.Schema({
     availability:{
       type: String
     },
+    limit:{
+      type: Number  
+    },
     category: {
         type: String
     },
