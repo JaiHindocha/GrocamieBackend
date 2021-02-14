@@ -563,6 +563,7 @@ router.post("/import", async (req, res) => {
               gst : row["gst"],
               weight : row["weight"],
               availability : row["availability"],
+              limit: row["limit"],
               description : row["description"],
               imageUrl : row["imageUrl"],
               productImageUrl : row["productImageUrl"] });
@@ -598,6 +599,7 @@ router.post("/import", async (req, res) => {
             gst : row["gst"],
             weight : row["weight"],
             availability : row["availability"],
+            limit: row["limit"],
             description : row["description"],
             imageUrl : row["imageUrl"],
             productImageUrl : row["productImageUrl"] });
