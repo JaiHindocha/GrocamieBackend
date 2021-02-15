@@ -44,8 +44,29 @@ app.use("/community", community);
 app.use("/cart", cart);
 app.use("/order", order);
 app.use("/categories", categories);
-app.use("/fcm", fcm)
+// app.use("/fcm", fcm)
 
+const SERVER_KEY =
+  'AAAAZTt3e3w:APA91bHR9lVHIpEE9y9efNkD6L6RQ1HgTf9uttDOjvepznYhMXcjU29JDdcOl5y1Ot6eU4M0o530e5nL4UdPem6X-XUySUPQA5NKSnfsTMOeTgBFzeSna-GHM950BEsOejFQnqzjB-zM';
+app.post('/fcm/send', (req, res) => {
+  request(
+    {
+      url: 'https://fcm.googleapis.com/fcm/send',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `key=${SERVER_KEY}`,
+      },
+      body: JSON.stringify(req.body),
+    },
+    (err, response, body) => {
+      if (err) {
+        console.log(err);
+        res.status(400).send(err);
+      } else res.send(body);
+    }
+  );
+});
 
 app.post('/orders', (req, res) => {
   instance.orders.create(req.body, (err, order) => {
