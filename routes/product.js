@@ -103,12 +103,12 @@ router.post("/get", async(req, res) => {
   }
 
   if (searchType == "Best Seller"){
-    sortKey = "discount"
+    sortKey = "PriorityIndex"
     sortOrder = -1
   }
   else if (searchType == "Lowest Prices"){
-    sortKey = "sp"
-    sortOrder = 1
+    sortKey = "discount"
+    sortOrder = -1
   }
   else if (searchType == "Local Products"){
     var brand = "Rapid"
