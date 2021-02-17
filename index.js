@@ -8,6 +8,7 @@ const categories = require("./routes/categories"); //new addition
 const cart = require("./routes/cart");
 const fcm = require("./routes/fcm");
 const order = require("./routes/order");
+const invoice = require("./routes/invoice/generateInvoices");
 const cors = require('cors');
 
 const request = require('request');
@@ -45,6 +46,7 @@ app.use("/community", community);
 app.use("/cart", cart);
 app.use("/order", order);
 app.use("/categories", categories);
+app.use("/invoice", invoice)
 // app.use("/fcm", fcm)
 
 const SERVER_KEY =
